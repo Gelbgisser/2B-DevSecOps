@@ -51,7 +51,26 @@ Open **Ubuntu** from the Start menu for the rest of this page.
 
 ## 2. Install Git (and basic build tools) **inside WSL**
 
-Class commands use the **Linux** `git`, not Git Bash on Windows. Windows “Git for Windows” is optional and unused in labs.
+Class commands use the **Linux** `git` inside Ubuntu, not “Git for Windows” / Git Bash.
+
+### Why not the regular Windows Git installer?
+
+You *can* install Git for Windows. We still install Git **in Ubuntu** because **the whole course runs in WSL**:
+
+| | Git for Windows (Git Bash / PowerShell) | Git in WSL Ubuntu |
+|--|-----------------------------------------|-------------------|
+| Shell | Windows world (`C:\Users\...`) | Same bash as `docker`, `make`, Day 3 VM |
+| Files | NTFS, CRLF line endings by default | Linux filesystem (`~/src`), LF |
+| Docker | Easy to clone under `C:\` then wonder why builds are slow | Clone next to where Docker Desktop’s WSL engine reads files |
+| Keys / tokens | `C:\Users\you\.ssh` | `~/.ssh` in Ubuntu — the same place `git push` in class uses |
+
+If you only install Windows Git and then type `git` in Ubuntu, you often get a **Windows** binary via `/mnt/c/Program Files/Git/...`. That mix causes:
+
+- `warning: LF will be replaced by CRLF` and broken shell scripts (`./apply.sh` fails with `\r`)
+- Credentials/SSH keys in the Windows profile while you work in Linux
+- Slow or confusing paths (`/mnt/c/Users/...` vs `~/src`)
+
+**Git for Windows is optional** if you like GitHub Desktop or VS Code’s Windows Git UI. For every copy-paste in this repo, use Ubuntu’s `git` (`which git` → `/usr/bin/git`).
 
 ```bash
 # Update package lists, then install tools.

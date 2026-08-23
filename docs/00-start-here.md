@@ -22,6 +22,8 @@ Day 3+    same app on a Linux VM with k3s (data on disks that survive restarts)
 
 If a prompt looks like `C:\Users\...>` you are in **cmd/PowerShell**. Open Ubuntu instead. Prompt should look like `you@pc:~/src/2B-DevSecOps$`.
 
+**Why Git inside Ubuntu, not the Windows Git installer?** Docker, bash labs, and (later) the Linux VM all speak Linux. One `git` in WSL keeps line endings, SSH keys, and the repo on the same filesystem as `docker build`. Git for Windows is a different world (`C:\`, CRLF). Details: [`00-prerequisites-wsl-docker.md`](00-prerequisites-wsl-docker.md) § 2.
+
 ## Git: your fork — not branches on the class repo
 
 The class curriculum lives here (read-only for learners):
