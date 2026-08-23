@@ -12,17 +12,22 @@ Day 2     several containers, only NGINX is visible on localhost
 Day 3+    same app on a Linux VM with k3s (data on disks that survive restarts)
 ```
 
-## Where you type commands
+## Where you type commands (two tools, one repo)
+
+This class is **Windows + Cursor + Docker Desktop**. Do not fight that.
 
 | Place | Use it for |
 |-------|------------|
-| **WSL Ubuntu** (Start menu → Ubuntu) | Almost every command in Days 1–2. This is bash, not PowerShell. |
-| **Windows browser** | Open `http://localhost:3080` (Day 2). Docker Desktop publishes ports onto Windows localhost. |
-| **Linux VM** (Day 3+) | `kubectl`, Helm, k3s. Not Day 1. |
+| **Cursor / VS Code** (this folder on `C:\...`) | Git: clone, commit, push, pull, branches. Source Control UI is enough. |
+| **WSL Ubuntu** (Start → **Ubuntu**, not “docker-desktop”) | `docker` / `docker compose` / bash labs (Days 1–2). |
+| **Windows browser** | `http://localhost:3080` (Day 2). |
+| **Linux VM** (Day 3+) | `kubectl`, Helm, k3s. |
 
-If a prompt looks like `C:\Users\...>` you are in **cmd/PowerShell**. Open Ubuntu instead. Prompt should look like `you@pc:~/src/2B-DevSecOps$`.
+**One working copy:** the Windows folder Cursor already has open (e.g. `C:\Users\You\Desktop\Projects\2B-DevSecOps`). From Ubuntu, `cd` into that same folder via `/mnt/c/Users/...`. Do **not** keep a second clone in `~/src` unless you know you want two copies.
 
-**Why Git inside Ubuntu, not the Windows Git installer?** Docker, bash labs, and (later) the Linux VM all speak Linux. One `git` in WSL keeps line endings, SSH keys, and the repo on the same filesystem as `docker build`. Git for Windows is a different world (`C:\`, CRLF). Details: [`00-prerequisites-wsl-docker.md`](00-prerequisites-wsl-docker.md) § 2.
+If the prompt is `docker-desktop:/tmp/...#` you are in Docker Desktop’s **internal** mini-Linux. It has no `apt`, no `sudo`, no class tools. Close it. Open **Ubuntu**.
+
+If the prompt is `C:\Users\...>` you can use Git there (Git for Windows) or Cursor. For `docker ...` still use Ubuntu.
 
 ## Git: your fork — not branches on the class repo
 
@@ -40,18 +45,18 @@ The class curriculum lives here (read-only for learners):
 **Why:** the public repo is the shared textbook. Your fork is your notebook. Day 5 you will add a **second** remote (local Gitea) for Jenkins — still not the class GitHub.
 
 Step-by-step fork/clone/push: [`00-git-basics.md`](00-git-basics.md).  
-Install Git first: [`00-prerequisites-wsl-docker.md`](00-prerequisites-wsl-docker.md) § Install Git.
+Install Git for Windows + Ubuntu: [`00-prerequisites-wsl-docker.md`](00-prerequisites-wsl-docker.md).
 
 ## Exact sequence (first evening / morning of Day 1)
 
 1. Hardware check (16 GB RAM ideal, virtualization on).
-2. Install **WSL2 + Ubuntu** (reboot once).
-3. Install **Git inside WSL** (`sudo apt install git`) — Windows “Git for Windows” is optional and **not** what we use in class.
-4. Install **Docker Desktop**, turn on Ubuntu WSL integration, verify `docker run --rm hello-world`.
-5. Create a **GitHub account**, fork `ItayPr/2B-DevSecOps`, clone **your** fork into `~/src`.
-6. `cp .env.example .env` (never commit `.env`).
-7. Work through [`00-git-basics.md`](00-git-basics.md) until you have pushed a branch to **your** fork.
-8. Open [`days/day-01-dockerfile/README.md`](../days/day-01-dockerfile/README.md).
+2. Install **Git for Windows** (Cursor/VS Code will use this for push/pull).
+3. Install **WSL2 + Ubuntu** (reboot once) — only for Docker/bash, not as your main Git.
+4. Install **Docker Desktop**, enable **Ubuntu** WSL integration (not the `docker-desktop` distro).
+5. Fork `ItayPr/2B-DevSecOps` on GitHub. Clone **your fork** into a Windows folder and open it in Cursor.
+6. `copy .env.example .env` (PowerShell) or `cp .env.example .env` in Ubuntu — never commit `.env`.
+7. Work through [`00-git-basics.md`](00-git-basics.md) until a branch exists on **your** fork (Source Control is fine).
+8. In **Ubuntu**, `cd` to that same folder and start [`days/day-01-dockerfile/README.md`](../days/day-01-dockerfile/README.md).
 
 If any step fails, [`troubleshooting.md`](troubleshooting.md).
 

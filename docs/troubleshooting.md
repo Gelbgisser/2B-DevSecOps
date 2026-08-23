@@ -4,6 +4,16 @@ Commands are **bash** (WSL or the Linux VM) unless noted.
 
 ## Docker Desktop / WSL integration
 
+**Symptom:** prompt looks like `docker-desktop:/tmp/...#` and `sudo` / `apt` / `git` are `not found`.
+
+You opened Docker Desktop’s **internal** distro. It is not Ubuntu and not for class.
+
+- Close that terminal.
+- Start menu → **Ubuntu**.
+- `wsl -l -v` should list `Ubuntu` version 2. Use that distro: `wsl -d Ubuntu`.
+
+**Symptom:** `docker version` has no Server section, or `Cannot connect to the Docker daemon`.
+
 **Symptom:** `docker version` has no Server section, or `Cannot connect to the Docker daemon`.
 
 - Docker Desktop is running (whale icon).

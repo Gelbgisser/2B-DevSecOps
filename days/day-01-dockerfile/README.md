@@ -1,7 +1,7 @@
 # Day 1 — Git + your first Docker images
 
 **Timebox:** ~6.5 hours (Git 45–60 min + labs)  
-**Where:** Windows 11, **all commands in WSL Ubuntu**  
+**Where:** Windows 11. Git in **Cursor**. Docker commands in **WSL Ubuntu** (not `docker-desktop`).  
 **Do this first:** [`docs/00-start-here.md`](../../docs/00-start-here.md) → [`docs/00-prerequisites-wsl-docker.md`](../../docs/00-prerequisites-wsl-docker.md) → [`docs/00-git-basics.md`](../../docs/00-git-basics.md)
 
 **How Dockerfiles are put together:** [`docs/01-reading-dockerfiles.md`](../../docs/01-reading-dockerfiles.md) (open it next to the lab files).

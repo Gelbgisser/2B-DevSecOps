@@ -10,7 +10,7 @@ This repository is **self-contained**. You do not need any product codebase to t
 
 1. Read **what to expect and whose GitHub you push to:** [`docs/00-start-here.md`](docs/00-start-here.md).  
    Short version: **fork this repo to your account.** Lab branches live on **your** fork. Do **not** push to `ItayPr/2B-DevSecOps`.
-2. Install WSL, **Git in Ubuntu**, Docker Desktop: [`docs/00-prerequisites-wsl-docker.md`](docs/00-prerequisites-wsl-docker.md).
+2. Install **Git for Windows** (Cursor push/pull) and WSL Ubuntu (Docker only): [`docs/00-prerequisites-wsl-docker.md`](docs/00-prerequisites-wsl-docker.md).
 3. Fork, clone, first push: [`docs/00-git-basics.md`](docs/00-git-basics.md).
 4. How to read a Dockerfile (line by line): [`docs/01-reading-dockerfiles.md`](docs/01-reading-dockerfiles.md).
 5. Open **Day 1**: [`days/day-01-dockerfile/README.md`](days/day-01-dockerfile/README.md) (every `docker` flag is commented).
