@@ -44,19 +44,19 @@ The class curriculum lives here (read-only for learners):
 
 **Why:** the public repo is the shared textbook. Your fork is your notebook. Day 5 you will add a **second** remote (local Gitea) for Jenkins — still not the class GitHub.
 
-Step-by-step fork/clone/push: [`00-git-basics.md`](00-git-basics.md).  
-Install Git for Windows + Ubuntu: [`00-prerequisites-wsl-docker.md`](00-prerequisites-wsl-docker.md).
+Step-by-step **install Cursor + GitHub clone/push:** [`00-cursor-git.md`](00-cursor-git.md).  
+Fork/branch practice: [`00-git-basics.md`](00-git-basics.md).  
+WSL + Docker: [`00-prerequisites-wsl-docker.md`](00-prerequisites-wsl-docker.md).
 
 ## Exact sequence (first evening / morning of Day 1)
 
 1. Hardware check (16 GB RAM ideal, virtualization on).
-2. Install **Git for Windows** (Cursor/VS Code will use this for push/pull).
+2. Install **Git for Windows** and **Cursor** (or VS Code). Connect Cursor to GitHub and clone **your fork** — click-by-click: [`00-cursor-git.md`](00-cursor-git.md).
 3. Install **WSL2 + Ubuntu** (reboot once) — only for Docker/bash, not as your main Git.
 4. Install **Docker Desktop**, enable **Ubuntu** WSL integration (not the `docker-desktop` distro).
-5. Fork `ItayPr/2B-DevSecOps` on GitHub. Clone **your fork** into a Windows folder and open it in Cursor.
-6. `copy .env.example .env` (PowerShell) or `cp .env.example .env` in Ubuntu — never commit `.env`.
-7. Work through [`00-git-basics.md`](00-git-basics.md) until a branch exists on **your** fork (Source Control is fine).
-8. In **Ubuntu**, `cd` to that same folder and start [`days/day-01-dockerfile/README.md`](../days/day-01-dockerfile/README.md).
+5. `copy .env.example .env` (PowerShell) or `cp .env.example .env` in Ubuntu — never commit `.env`.
+6. Work through [`00-git-basics.md`](00-git-basics.md) until a branch exists on **your** fork (Source Control is fine).
+7. In **Ubuntu**, `cd` to that same folder and start [`days/day-01-dockerfile/README.md`](../days/day-01-dockerfile/README.md).
 
 If any step fails, [`troubleshooting.md`](troubleshooting.md).
 

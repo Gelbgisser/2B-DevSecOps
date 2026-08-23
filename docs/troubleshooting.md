@@ -25,7 +25,16 @@ You opened Docker Desktop’s **internal** distro. It is not Ubuntu and not for 
 
 - Settings → Resources: memory **≥6 GB**. Close other browsers.
 
-## Port conflicts
+**Symptom:** Cursor Source Control empty, or “Git not found”.
+
+- Install Git for Windows, **restart Cursor**.
+- Settings → `git.path` → `C:\Program Files\Git\cmd\git.exe`.
+- Full UI walkthrough: [`00-cursor-git.md`](00-cursor-git.md).
+
+**Symptom:** `Authentication failed` / `could not read Username`.
+
+- GitHub does not accept your account password. Use browser login, Git Credential Manager, or a PAT (see [`00-cursor-git.md`](00-cursor-git.md)).
+- Confirm `git remote -v` `origin` is **your** fork, not `ItayPr/2B-DevSecOps`.
 
 **Symptom:** `Bind for 0.0.0.0:3080 failed`.
 

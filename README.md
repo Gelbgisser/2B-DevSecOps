@@ -10,7 +10,7 @@ This repository is **self-contained**. You do not need any product codebase to t
 
 1. Read **what to expect and whose GitHub you push to:** [`docs/00-start-here.md`](docs/00-start-here.md).  
    Short version: **fork this repo to your account.** Lab branches live on **your** fork. Do **not** push to `ItayPr/2B-DevSecOps`.
-2. Install **Git for Windows** (Cursor push/pull) and WSL Ubuntu (Docker only): [`docs/00-prerequisites-wsl-docker.md`](docs/00-prerequisites-wsl-docker.md).
+2. Install **Git for Windows**, **Cursor (or VS Code)**, connect them to **your GitHub fork**, and install WSL Ubuntu + Docker: [`docs/00-prerequisites-wsl-docker.md`](docs/00-prerequisites-wsl-docker.md) and [`docs/00-cursor-git.md`](docs/00-cursor-git.md) (click-by-click clone / Source Control / GitHub login).
 3. Fork, clone, first push: [`docs/00-git-basics.md`](docs/00-git-basics.md).
 4. How to read a Dockerfile (line by line): [`docs/01-reading-dockerfiles.md`](docs/01-reading-dockerfiles.md).
 5. Open **Day 1**: [`days/day-01-dockerfile/README.md`](days/day-01-dockerfile/README.md) (every `docker` flag is commented).
@@ -138,6 +138,7 @@ PowerShell is not the default. If a command must differ, the lab calls it out.
 | Doc | When |
 |-----|------|
 | [Start here (expect / GitHub fork)](docs/00-start-here.md) | Before any install |
+| [Cursor + GitHub (install, clone, push UI)](docs/00-cursor-git.md) | Before Day 1 Git lab |
 | [Prerequisites: Git + WSL + Docker](docs/00-prerequisites-wsl-docker.md) | Before Day 1 |
 | [Git: fork, branch, pull, push](docs/00-git-basics.md) | Morning of Day 1 |
 | [Reading Dockerfiles](docs/01-reading-dockerfiles.md) | Day 1 labs |

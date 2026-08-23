@@ -1,7 +1,7 @@
 # Git basics — fork, branch, pull, push (your repo)
 
 **Timebox:** 45–60 minutes, morning of Day 1.  
-**Prerequisites:** Git for Windows + this folder open in Cursor ([`00-prerequisites-wsl-docker.md`](00-prerequisites-wsl-docker.md)).
+**Prerequisites:** Git for Windows + Cursor connected to GitHub ([`00-cursor-git.md`](00-cursor-git.md), [`00-prerequisites-wsl-docker.md`](00-prerequisites-wsl-docker.md)). If the editor is not installed yet, stop and do the Cursor page first.
 
 You can do this lab **entirely in Cursor Source Control**. The commands below are the same operations if you prefer a terminal (PowerShell or Git Bash). You do **not** need Git inside Ubuntu for this page.
 

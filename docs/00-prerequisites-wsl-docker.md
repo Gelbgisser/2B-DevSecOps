@@ -16,7 +16,7 @@ Commands: **PowerShell** or Cursor for Git; **bash in Ubuntu** for Docker. Never
 - Virtualization **on** in BIOS (Intel VT-x / AMD-V). Task Manager → Performance → CPU should say “Virtualization: Enabled”
 - Admin rights **once** (WSL + Docker Desktop installers)
 - A **GitHub account** (free): https://github.com/signup  
-  You will fork the class repo. You will **not** push to the instructor’s repo.
+- **Cursor** (https://cursor.com/download) or **VS Code** (https://code.visualstudio.com/) — how to install and attach Git: [`00-cursor-git.md`](00-cursor-git.md)
 
 Give Docker Desktop / WSL **at least 6 GB RAM**: Docker Desktop → Settings → Resources.
 
@@ -93,6 +93,8 @@ Installing Git *again* inside Ubuntu is optional (CLI in bash). If both exist, s
 GitHub rejects account passwords for `git push`. Cursor will prompt a browser login, or use a **Personal Access Token**, or Git Credential Manager (comes with Git for Windows).
 
 SSH is optional (GitHub → Settings → SSH keys). Not required if Cursor HTTPS works.
+
+**Install Cursor / VS Code and clone your fork (screens, buttons):** [`00-cursor-git.md`](00-cursor-git.md).
 
 ---
 
