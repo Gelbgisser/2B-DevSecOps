@@ -121,6 +121,10 @@ Expected: row `3` is still there. `kubectl -n secure-demo get pvc` still `Bound`
 
 **Do not** switch the volume to `hostPath` “to make it easier”.
 
+### In production / cloud
+
+`storageClassName: local-path` is the lab disk. On EKS/GKE/AKS you change **one field** to `gp3` / `managed-csi` / `standard-rwo` (CSI). Traefik on the VM node becomes a cloud LoadBalancer + TLS. Same manifests. [`docs/02-lab-to-cloud.md`](../../docs/02-lab-to-cloud.md). Example Helm overrides: [`platform/helm/secure-demo/values-cloud.yaml.example`](../../platform/helm/secure-demo/values-cloud.yaml.example).
+
 ---
 
 ## Lab 5 — Empty endpoints (debug)

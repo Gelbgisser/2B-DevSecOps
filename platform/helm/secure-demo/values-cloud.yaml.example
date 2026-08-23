@@ -1,0 +1,44 @@
+# Example only — not used in class. Copy ideas into a private values-prod.yaml.
+# Do not put real passwords here. Day 6 / External Secrets stay the source of truth.
+#
+# How this maps from the lab:
+#   persistence.storageClass: local-path   →  cloud CSI class (gp3, managed-csi, pd-balanced)
+#   ingress host empty / VM IP             →  real DNS + TLS
+#   postgres.enabled: true                 →  often false; DATABASE_URL points at RDS / Cloud SQL
+
+replicaCount: 3
+
+appUrl: https://shop.example.com
+
+ingress:
+  enabled: true
+  className: nginx          # or alb, gce, azure/application-gateway — whatever the platform installed
+  host: shop.example.com
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    # Cloud WAF / CDN examples (pick one ecosystem — do not stack blindly):
+    # alb.ingress.kubernetes.io/scheme: internet-facing
+    # kubernetes.io/ingress.allow-http: "false"
+
+persistence:
+  # Lab uses local-path on the k3s VM. Cloud examples:
+  #   AWS EKS:     gp3   (ebs.csi.aws.com)
+  #   Azure AKS:   managed-csi
+  #   GCP GKE:     standard-rwo  or  premium-rwo
+  storageClass: gp3
+  postgresSize: 20Gi
+  redisSize: 8Gi
+  # Production uploads usually leave the cluster (S3). Keep a PVC only if you still scan-to-disk.
+  uploadsSize: 20Gi
+
+postgres:
+  # Typical production: false, and inject DATABASE_URL from a secret manager.
+  enabled: true
+
+resources:
+  api:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      memory: 1Gi

@@ -27,8 +27,8 @@ Every day README must keep:
 - Copy private product code, customer data, or real realm secrets into this repo.
 - Hardcode `http://localhost` without the published port, or assume `:80`.
 - Publish database / scanner ports on the host in later-day Compose/Helm.
-- Require a cloud account for Days 1–4.
-- Use `hostPath` for databases on k3s. Use a PVC and the default `local-path` StorageClass.
+- Require a cloud account for Days 1–4. Optional tunnel (Day 7) and store accounts (Day 9 discussion) stay optional.
+- Use `hostPath` for databases on k3s. Use a PVC and the default `local-path` StorageClass. Document the cloud CSI equivalent in [`docs/02-lab-to-cloud.md`](docs/02-lab-to-cloud.md).
 
 ## Make targets
 
@@ -36,4 +36,4 @@ Keep `Makefile` in sync when you add scanner scripts or compose files. `make lin
 
 ## Compressing the calendar
 
-If the class is 5–6 days, merge using [`instructor/schedule-5-day-compress.md`](instructor/schedule-5-day-compress.md). Do not delete day folders — jump links instead.
+If the class is 5–6 days, merge using [`instructor/schedule-5-day-compress.md`](instructor/schedule-5-day-compress.md). Full calendar with mobile: [`instructor/schedule-9-day.md`](instructor/schedule-9-day.md). Do not delete day folders — jump links instead.

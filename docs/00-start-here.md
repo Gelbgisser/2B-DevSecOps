@@ -4,12 +4,13 @@ Read this page **before** you install anything. It answers: where you type comma
 
 ## What you are building toward
 
-In eight days you will run a tiny shop (web + API + database) **behind an edge proxy**, then deploy it on **k3s**, then add CI, GitOps, and scanners. You do **not** start on Kubernetes. You start with Git and a single Docker image on your Windows laptop.
+In nine days you will run a tiny shop (web + API + database) **behind an edge proxy**, deploy it on **k3s**, add CI, GitOps, and scanners, then (Day 9) hit the same API from a **phone**. Days 1–8 are the core path; Day 9 is a workshop. You do **not** start on Kubernetes. You start with Git and a single Docker image on your Windows laptop.
 
 ```text
 Day 1     one container you built yourself
 Day 2     several containers, only NGINX is visible on localhost
 Day 3+    same app on a Linux VM with k3s (data on disks that survive restarts)
+Day 9     phone on Wi‑Fi → http://<your-PC-LAN-IP>:3080  (not localhost)
 ```
 
 ## Where you type commands (two tools, one repo)
@@ -21,6 +22,7 @@ This class is **Windows + Cursor + Docker Desktop**. Do not fight that.
 | **Cursor / VS Code** (this folder on `C:\...`) | Git: clone, commit, push, pull, branches. Source Control UI is enough. |
 | **WSL Ubuntu** (Start → **Ubuntu**, not “docker-desktop”) | `docker` / `docker compose` / bash labs (Days 1–2). |
 | **Windows browser** | `http://localhost:3080` (Day 2). |
+| **Phone browser** (Day 9) | `http://<PC-LAN-IP>:3080` — same Wi‑Fi as the laptop. |
 | **Linux VM** (Day 3+) | `kubectl`, Helm, k3s. |
 
 **One working copy:** the Windows folder Cursor already has open (e.g. `C:\Users\You\Desktop\Projects\2B-DevSecOps`). From Ubuntu, `cd` into that same folder via `/mnt/c/Users/...`. Do **not** keep a second clone in `~/src` unless you know you want two copies.
@@ -90,8 +92,10 @@ docker build -t lab-a-hello:1 .
 | `*.yaml` under `platform/k8s` | Day 3 | Kubernetes objects |
 | Helm `values.yaml` | Day 4 | Knobs for the same manifests |
 | `Jenkinsfile` | Day 5 | CI stages |
+| Expo / Flutter under `apps/mobile-demo` | Day 9 | Phone clients; they call the **edge**, not `api:3001` |
 
-Walkthrough of Dockerfiles: [`01-reading-dockerfiles.md`](01-reading-dockerfiles.md) (also embedded in Day 1 labs).
+Walkthrough of Dockerfiles: [`01-reading-dockerfiles.md`](01-reading-dockerfiles.md) (also embedded in Day 1 labs).  
+Laptop lab → cloud Kubernetes: [`02-lab-to-cloud.md`](02-lab-to-cloud.md).
 
 ## Security habits (from hour one)
 

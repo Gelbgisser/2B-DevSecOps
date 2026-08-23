@@ -125,3 +125,7 @@ Optional: `--set clamav.annotation=true` and find the example WAF annotation in 
 - [ ] I can switch replica counts via values files
 - [ ] I rolled back a release
 - [ ] I did not commit a filled secrets values file
+
+### In production / cloud
+
+You would keep this chart and swap values: `persistence.storageClass`, Ingress host + cert-manager, replica counts, and often `postgres.enabled=false` with `DATABASE_URL` pointing at a managed database. [`values-cloud.yaml.example`](../../platform/helm/secure-demo/values-cloud.yaml.example) and [`docs/02-lab-to-cloud.md`](../../docs/02-lab-to-cloud.md).

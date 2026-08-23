@@ -1,8 +1,8 @@
 # DevSecOps Bootcamp
 
-Eight-day, lab-first training for developers and ops. You will build, ship, and **secure** a tiny shop API — from a Dockerfile on Windows to GitOps on k3s.
+Nine-day, lab-first training for developers and ops. You will build, ship, and **secure** a tiny shop API — from a Dockerfile on Windows to GitOps on k3s — then wire a **phone** to the same API.
 
-This repository is **self-contained**. You do not need any product codebase to teach or take the course.
+This repository is **self-contained**. You do not need any product codebase to teach or take the course. Days 1–8 are the core path (capstone on Day 8). **Day 9** is a mobile workshop (Flutter / React Native) and can be a half-day after the capstone.
 
 ## Start here if you are new
 
@@ -30,6 +30,7 @@ Developers and ops who may be new to containers. Security is not an appendix —
 | Days 1–2 (Windows + Docker Desktop) | 8 GB workable, **16 GB better** | 40 GB free | WSL2 + Docker Desktop. Give WSL **≥6 GB**. |
 | Days 3–4 (Linux VM + k3s) | VM: **8 GB** | 40 GB | Ubuntu 22.04/24.04. Host still runs Windows. |
 | Days 5–6 full CI + GitOps | VM: **12–16 GB** | 60 GB | Gitea + Jenkins + Nexus + Argo CD + Vault. |
+| Day 9 (mobile) | Same as Days 1–2 | — | Physical phone on the **same Wi‑Fi** as the PC. Expo Go is enough; Flutter SDK optional. |
 | Lite mode | VM: 8 GB | 40 GB | Skip Nexus UI; use the local registry. Skip WAF image. |
 
 **Capstone** can run the Compose path (Days 1–2 + scanners) if the VM is under-powered. The rubric says which extras earn extra credit.
@@ -62,8 +63,9 @@ Docker Desktop is for **learning containers**. k3s is for **learning Kubernetes 
 | 6 | GitOps + Vault | [`days/day-06-gitops-secrets`](days/day-06-gitops-secrets/README.md) | Argo CD sync; secrets not in git |
 | 7 | Edge & malware | [`days/day-07-edge-waf-malware`](days/day-07-edge-waf-malware/README.md) | Headers, WAF/CRS or F5 concepts, ClamAV, optional tunnel |
 | 8 | Supply chain & capstone | [`days/day-08-supply-chain-capstone`](days/day-08-supply-chain-capstone/README.md) | Syft/Grype/Semgrep/Gitleaks + CIS + self-deploy |
+| 9 | Mobile clients | [`days/day-09-mobile`](days/day-09-mobile/README.md) | Phone → LAN `IP:port`, then Play Store / App Store / HTTPS Ingress |
 
-Days 5–6 or 7–8 can merge if you compress to 5–6 training days. See [`instructor/schedule-5-day-compress.md`](instructor/schedule-5-day-compress.md).
+Days 5–6 or 7–8 can merge if you compress to 5–6 training days. Day 9 is an optional workshop on a 5-day calendar. See [`instructor/schedule-5-day-compress.md`](instructor/schedule-5-day-compress.md) and [`instructor/schedule-9-day.md`](instructor/schedule-9-day.md).
 
 ## Public origin rule (read this once)
 
@@ -74,7 +76,7 @@ Browsers and identity providers talk to the **published edge port**, not to an i
 | `NGINX_HTTP_PORT` | `3080` | Host port the edge publishes. Avoid `80` (needs admin / collides). |
 | `APP_URL` | `http://localhost:3080` | Origin humans and redirects use. **Must include that port.** |
 
-Only the **edge** (NGINX / Ingress / Cloudflare Tunnel) publishes a host port in later labs. Databases, Redis, ClamAV, and scanners stay on internal networks.
+Only the **edge** (NGINX / Ingress / Cloudflare Tunnel) publishes a host port in later labs. Databases, Redis, ClamAV, and scanners stay on internal networks. A **phone** must use a URL it can route to (LAN IP + that port in class; `https://api.example.com` in production) — never `localhost` on the device.
 
 Copy env once:
 
@@ -104,8 +106,9 @@ Rubric: [`instructor/answer-keys.md`](instructor/answer-keys.md).
 ```text
 apps/secure-demo/     Teaching app (Node API + static web + worker)
 apps/java-lib/        Tiny Maven + Gradle module for Day 5 only
+apps/mobile-demo/     Day 9 Expo (React Native) + Flutter clients
 days/                 One folder per training day (README, labs, exercises, solutions)
-docs/                 Prerequisites, Git, Terraform, k3s VM, glossary, troubleshooting
+docs/                 Prerequisites, Git, Terraform, k3s VM, lab→cloud, glossary
 platform/             Compose, k8s manifests, Helm, CI, Terraform
 security/             Policies + scanner scripts
 instructor/           Schedules, checklist, answer keys
@@ -131,7 +134,7 @@ PowerShell is not the default. If a command must differ, the lab calls it out.
 - Every day ends with a **self-check** and a **debug challenge**.
 - Solutions live under each day's `solutions/` — try the exercise first.
 - No real secrets in git. Vault labs use **dev tokens** only.
-- No cloud account for Days 1–4. Cloudflare Tunnel on Day 7 is optional.
+- No cloud account for Days 1–4. Cloudflare Tunnel on Day 7 is optional. Lab objects map to EKS/GKE/AKS in [`docs/02-lab-to-cloud.md`](docs/02-lab-to-cloud.md).
 
 ## Docs index
 
@@ -144,6 +147,7 @@ PowerShell is not the default. If a command must differ, the lab calls it out.
 | [Reading Dockerfiles](docs/01-reading-dockerfiles.md) | Day 1 labs |
 | [Linux VM + k3s](docs/00-linux-vm-k3s.md) | Before Day 3 |
 | [Terraform basics](docs/01-terraform-basics.md) | End of Day 2 / start of Day 3 |
+| [Lab → cloud / real k8s](docs/02-lab-to-cloud.md) | After Day 2 volumes; again on Days 3–4 and 9 |
 | [Pedagogy map](docs/pedagogy.md) | Instructors |
 | [Glossary](docs/glossary.md) | Any time |
 | [Troubleshooting](docs/troubleshooting.md) | When stuck |

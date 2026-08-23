@@ -8,7 +8,7 @@ kubectl apply -f platform/k8s/base/secret.example.yaml
 ```
 
 - Services are ClusterIP. Traefik is the edge (host 80 on the VM).
-- PVCs use StorageClass `local-path`. Do not switch Postgres to hostPath.
+- PVCs use StorageClass `local-path`. Do not switch Postgres to hostPath. Cloud CSI mapping: [`docs/02-lab-to-cloud.md`](../../docs/02-lab-to-cloud.md).
 - Import locally built images with `docker save | sudo k3s ctr images import -`.
 
 Helm chart: [`../helm/secure-demo`](../helm/secure-demo).  

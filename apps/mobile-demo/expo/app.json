@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "Secure Demo Mobile",
+    "slug": "secure-demo-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsLocalNetworking": true,
+          "NSAllowsArbitraryLoads": true
+        }
+      }
+    },
+    "android": {
+      "usesCleartextTraffic": true
+    },
+    "plugins": [],
+    "extra": {
+      "apiBase": "http://127.0.0.1:3080"
+    }
+  }
+}

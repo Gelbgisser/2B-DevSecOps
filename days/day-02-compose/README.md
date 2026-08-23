@@ -138,6 +138,10 @@ make up
 
 **Never** run `down -v` against a volume you care about. Day 3’s PVC lesson is the Kubernetes version of this.
 
+### In production / cloud
+
+The named volume is the **same idea** as a Kubernetes PVC (and later a cloud disk). At work you snapshot before delete, and you often replace in-cluster Postgres with RDS / Cloud SQL — but you still treat data as something that must outlive the container. Mapping table: [`docs/02-lab-to-cloud.md`](../../docs/02-lab-to-cloud.md).
+
 ---
 
 ## Lab 4 — 502 after rebuild (resolver)

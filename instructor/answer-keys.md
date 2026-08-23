@@ -31,6 +31,7 @@ Share **after** learners attempt the day. Daily `solutions/` folders are the tec
 | 6 | Argo cannot clone | In-cluster URL, not localhost |
 | 7 | WAF blocks upload | Tune one CRS rule, not disable engine |
 | 8 | Grype DB | Offline DB cache; do not drop the gate |
+| 9 | Phone `Network request failed` | `localhost` is the phone; Windows Firewall / Public profile; cleartext/ATS blocked |
 
 ## Git push rejected
 

@@ -12,4 +12,6 @@ Do **not** delete day folders. Skip or homework the struck items.
 
 Capstone Track A (Compose) is the default on 5 days. Track B if the VM was ready on calendar day 3.
 
-See also [`schedule-8-day.md`](schedule-8-day.md).
+**Day 9 (mobile)** does not fit a 5-day compress. Offer it as an evening / follow-up workshop (Expo Go + LAN origin is enough).
+
+See also [`schedule-8-day.md`](schedule-8-day.md) and [`schedule-9-day.md`](schedule-9-day.md).

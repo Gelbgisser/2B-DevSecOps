@@ -128,7 +128,7 @@ Alternatively install **k3s + buildah/nerdctl**, or use the Gitea/Jenkins regist
 | One PVC per stateful workload | Bind-mount the Windows drive into k3s |
 | `kubectl get pvc` until Bound | Delete PVC unless you intend to wipe data |
 
-k3s stores volume data on the VM disk. Snapshots of the VM are your backup during class.
+k3s stores volume data on the VM disk. Snapshots of the VM are your backup during class. In cloud the same PVC YAML uses a CSI StorageClass (`gp3`, `managed-csi`, …) — [`docs/02-lab-to-cloud.md`](02-lab-to-cloud.md).
 
 Simulate “pod died, data lived”:
 

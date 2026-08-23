@@ -1,5 +1,7 @@
 # 8-day schedule (instructor)
 
+Core path without the mobile workshop. For Day 9 as well, use [`schedule-9-day.md`](schedule-9-day.md).
+
 Assume 09:00–16:30 with 60 min lunch. Security habit is explicit every afternoon.
 
 | Day | AM | PM |

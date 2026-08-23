@@ -10,5 +10,6 @@
 | 6 | [day-06-gitops-secrets](day-06-gitops-secrets/README.md) |
 | 7 | [day-07-edge-waf-malware](day-07-edge-waf-malware/README.md) |
 | 8 | [day-08-supply-chain-capstone](day-08-supply-chain-capstone/README.md) |
+| 9 | [day-09-mobile](day-09-mobile/README.md) |
 
-Start at the [root README](../README.md).
+Start at the [root README](../README.md). Lab objects map to cloud Kubernetes in [docs/02-lab-to-cloud.md](../docs/02-lab-to-cloud.md).

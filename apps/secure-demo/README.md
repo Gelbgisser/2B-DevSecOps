@@ -1,6 +1,6 @@
 # Secure Demo
 
-Tiny teaching app for the bootcamp. One language for the HTTP API: **Node.js**. Grow this app across eight days — do not start from a large product monorepo.
+Tiny teaching app for the bootcamp. One language for the HTTP API: **Node.js**. Grow this app across the course — do not start from a large product monorepo. Day 9 clients live in [`apps/mobile-demo`](../mobile-demo/README.md) and call this API through the **edge**.
 
 | Piece | Role | Speaks to |
 |-------|------|-----------|

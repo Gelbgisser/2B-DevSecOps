@@ -12,5 +12,6 @@
 - [ ] Git **for Windows** installed; Cursor Source Control works. Learners do not use the `docker-desktop` WSL distro as a terminal
 - [ ] Learners told: EICAR is streamed, not saved on Windows Desktop
 - [ ] Lite-mode story ready for 8 GB laptops (skip Nexus, skip WAF image)
+- [ ] If teaching Day 9: demo phone + Expo Go, classroom Wi‑Fi that allows client-to-client, firewall rule on `NGINX_HTTP_PORT` (Private profile)
 
 Emergency: Day 1–2 + Day 8 scanners still make a coherent “containers + supply chain” course if k3s VMs fail.

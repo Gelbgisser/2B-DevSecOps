@@ -32,6 +32,13 @@ target/
 !apps/java-lib/**
 !labs/**/fixtures/*.jar
 
+# Flutter / Expo local tooling (Day 9)
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.expo/
+*.iml
+
 # Docker / Compose local state
 *.log
 docker-data/

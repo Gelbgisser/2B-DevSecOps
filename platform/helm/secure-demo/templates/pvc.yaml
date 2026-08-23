@@ -1,4 +1,5 @@
 {{- if .Values.persistence }}
+{{/* Lab: local-path. Cloud: values-cloud.yaml.example sets persistence.storageClass (gp3 / managed-csi). */}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

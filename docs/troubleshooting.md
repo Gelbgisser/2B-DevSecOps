@@ -14,8 +14,6 @@ You opened Docker Desktop’s **internal** distro. It is not Ubuntu and not for 
 
 **Symptom:** `docker version` has no Server section, or `Cannot connect to the Docker daemon`.
 
-**Symptom:** `docker version` has no Server section, or `Cannot connect to the Docker daemon`.
-
 - Docker Desktop is running (whale icon).
 - Settings → Resources → WSL integration → **Ubuntu** enabled; Apply & Restart.
 - Open a **new** WSL tab after changing integration.
@@ -104,6 +102,14 @@ If healthcheck fails: increase `start_period`. Do not publish 3310 on the host.
 
 - Compose: you ran `make down-v` or deleted the named volume.
 - k3s: PVC pending (`kubectl describe pvc`) or a **new** PVC name after helm values change.
+
+## Phone cannot reach the API (Day 9)
+
+- The app still uses `localhost` / `127.0.0.1` — that is the **phone**, not Docker on the PC. Use `http://<PC-LAN-IPv4>:3080`.
+- Windows Firewall or Wi‑Fi profile **Public**. Allow inbound TCP on `NGINX_HTTP_PORT`; set the LAN to **Private**.
+- Guest Wi‑Fi / client isolation: phone and PC cannot talk. Use the classroom LAN or a Cloudflare Tunnel hostname (HTTPS).
+- Android/iOS blocking HTTP: lab manifests must allow cleartext; production uses HTTPS instead.
+- Emulator vs device: Android emulator may use `http://10.0.2.2:3080` for the **host**. A physical phone never uses that alias.
 
 ## Windows browser cannot open the VM
 

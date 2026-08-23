@@ -104,6 +104,10 @@ kubectl -n secure-demo rollout restart deploy/api
 
 Document in notes: production uses Vault Agent, CSI driver, or External Secrets — **not** a human copying tokens.
 
+### In production / cloud
+
+Argo CD still syncs Git; the remote is GitHub/GitLab instead of in-cluster Gitea. Vault **dev** becomes HA Vault or cloud IAM (IRSA / Workload Identity / Azure Workload ID). Same lesson: the password is not in the Helm chart. [`docs/02-lab-to-cloud.md`](../../docs/02-lab-to-cloud.md).
+
 AppRole (optional extra): `vault auth enable approle` then a role bound to the policy. Do not check in `role_id` / `secret_id`.
 
 ---

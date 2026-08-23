@@ -1,3 +1,7 @@
+# PersistentVolumeClaims for lab data (k3s local-path on the VM disk).
+# Cloud: change storageClassName to the CSI class (gp3, managed-csi, …).
+# Databases stay ReadWriteOnce. Do not convert these to hostPath.
+# Mapping: docs/02-lab-to-cloud.md
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

@@ -5,8 +5,11 @@
 | **Edge** | The only process that publishes a host port (NGINX, Traefik Ingress, or Cloudflare Tunnel). |
 | **APP_URL** | Browser origin **including port** if not 80/443. Never invent `:80`. |
 | **Compose DNS** | Names like `api`, `postgres` on the Docker network. Browsers cannot use them. |
-| **PVC** | PersistentVolumeClaim. k3s `local-path` stores data on the **VM disk**. |
+| **PVC** | PersistentVolumeClaim. k3s `local-path` stores data on the **VM disk**. In cloud, the same claim uses a CSI class (`gp3`, `managed-csi`, …). |
+| **CSI** | Container Storage Interface — how Kubernetes asks a cloud for disks. |
 | **hostPath** | Bind a node folder into a pod. We avoid it for databases in class. |
+| **LAN origin** | `http://<PC-IPv4>:<NGINX_HTTP_PORT>` — what a phone uses on Day 9. Not `localhost`. |
+| **Cleartext / ATS** | Allowing HTTP on Android / iOS. Lab-only; stores expect HTTPS. |
 | **GitOps** | Cluster state matches a Git path (Argo CD). kubectl edits are drift. |
 | **SBOM** | Software bill of materials (Syft). What you shipped, in a file. |
 | **CRS** | OWASP Core Rule Set for ModSecurity. High false-positive rate until tuned. |

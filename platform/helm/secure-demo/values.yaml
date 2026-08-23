@@ -15,6 +15,8 @@ ingress:
     traefik.ingress.kubernetes.io/router.entrypoints: web
 
 persistence:
+  # Lab disk on the k3s VM. Cloud: gp3 / managed-csi / standard-rwo
+  # (see values-cloud.yaml.example and docs/02-lab-to-cloud.md).
   storageClass: local-path
   postgresSize: 2Gi
   redisSize: 1Gi

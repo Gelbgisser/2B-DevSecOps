@@ -26,7 +26,8 @@ services:
         condition: service_healthy
       web:
         condition: service_started
-    # HOST (Windows localhost) : CONTAINER (nginx listen 80)
+    # HOST:CONTAINER — binds 0.0.0.0 by default so a phone on LAN can reach the edge (Day 9).
+    # Do not change this to 127.0.0.1:3080:80 — that would hide the API from every other device.
     ports:
       - "${NGINX_HTTP_PORT:-3080}:80"
     volumes:
@@ -197,9 +198,9 @@ services:
     restart: unless-stopped
 
 volumes:
-  pgdata:
+  pgdata:        # Postgres — survives `compose down`, wiped by `down -v`
   redisdata:
-  uploads_data:
+  uploads_data:  # API quarantine/clean files (lab stand-in for object storage)
   clamav_data:
   gitea_data:
   jenkins_home:
