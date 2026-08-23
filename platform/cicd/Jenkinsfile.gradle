@@ -1,0 +1,12 @@
+pipeline {
+  agent any
+  stages {
+    stage('Gradle test') {
+      steps {
+        dir('apps/java-lib') {
+          sh 'gradle test --no-daemon'
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+replicaCount: 2
+appUrl: http://staging.secure-demo.lab
+ingress:
+  host: staging.secure-demo.lab
+resources:
+  api:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 512Mi

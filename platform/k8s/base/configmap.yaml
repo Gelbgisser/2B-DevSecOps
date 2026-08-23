@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: secure-demo
+  namespace: secure-demo
+data:
+  APP_URL: "http://localhost"
+  API_PORT: "3001"
+  # Browser origin must match how you reach Traefik on the VM.
+  # If the VM IP is 192.168.56.10 and Traefik listens on :80:
+  #   APP_URL=http://192.168.56.10
+  # If you later publish :3080 via a NodePort/Ingress port:
+  #   APP_URL=http://192.168.56.10:3080
+  CLAMAV_HOST: ""
+  CLAMAV_PORT: "3310"

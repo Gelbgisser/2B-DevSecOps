@@ -1,0 +1,10 @@
+# Overlay used in Day 2 healthcheck lab. From repo root:
+#   docker compose -f platform/compose/docker-compose.yml \
+#     -f days/day-02-compose/labs/broken-healthcheck.yml --env-file .env up
+services:
+  postgres:
+    healthcheck:
+      test: ["CMD-SHELL", "exit 1"]
+      interval: 2s
+      retries: 5
+      start_period: 1s

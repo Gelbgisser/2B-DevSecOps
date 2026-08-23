@@ -1,0 +1,34 @@
+# Traefik (bundled with k3s) is the edge. Services stay ClusterIP.
+# Set spec.rules[0].host to your VM hostname if you use /etc/hosts.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: secure-demo
+  namespace: secure-demo
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 3001
+          - path: /health
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 3001
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web
+                port:
+                  number: 8080

@@ -1,0 +1,27 @@
+# Example Ingress annotations for F5 BIG-IP Controller for Kubernetes (CIS)
+# or NGINX Ingress with WAF. This file is conceptual — you do not need F5
+# hardware in class. Day 7 discusses controller-level WAF vs sidecar vs
+# Compose ModSecurity.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: secure-demo-waf-example
+  namespace: secure-demo
+  annotations:
+    virtualserver.f5.com/ip: "0.0.0.0"
+    virtualserver.f5.com/partition: "lab"
+    nginx.org/waf: "true"
+    nginx.org/waf-mode: "monitoring"
+    nginx.org/modsecurity-policies: "owasp-crs"
+spec:
+  ingressClassName: f5
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 3001

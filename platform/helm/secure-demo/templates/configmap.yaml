@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: secure-demo
+  labels:
+    app.kubernetes.io/name: secure-demo
+data:
+  APP_URL: {{ .Values.appUrl | quote }}
+  CLAMAV_HOST: {{ if .Values.clamav.sidecar }}"127.0.0.1"{{ else }}""{{ end }}
+  CLAMAV_PORT: "3310"

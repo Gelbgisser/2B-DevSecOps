@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: secure-demo
+  labels:
+    app.kubernetes.io/part-of: secure-demo
+    pod-security.kubernetes.io/enforce: baseline

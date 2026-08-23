@@ -1,0 +1,10 @@
+# Day 7 optional: replace the edge with ModSecurity CRS.
+#   docker compose -f platform/compose/docker-compose.yml \
+#     -f platform/compose/docker-compose.waf.yml --env-file .env up -d
+services:
+  nginx:
+    image: owasp/modsecurity-crs:4-nginx-alpine-20240107
+    environment:
+      MODSEC_RULE_ENGINE: DetectionOnly
+      PORT: "80"
+    # Keep our reverse-proxy idea: mount a CRS-friendly conf in the lab README.

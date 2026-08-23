@@ -1,0 +1,52 @@
+replicaCount: 1
+
+image:
+  api: secure-demo-api:local
+  web: secure-demo-web:local
+  pullPolicy: IfNotPresent
+
+appUrl: http://localhost
+
+ingress:
+  enabled: true
+  className: ""
+  host: ""
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+
+persistence:
+  storageClass: local-path
+  postgresSize: 2Gi
+  redisSize: 1Gi
+  uploadsSize: 2Gi
+
+postgres:
+  enabled: true
+  image: postgres:16-alpine
+
+redis:
+  enabled: true
+  image: redis:7-alpine
+
+clamav:
+  # Day 4 exercise: set enabled=true to render a sidecar (full wiring is Day 7).
+  sidecar: false
+  image: clamav/clamav:1.4
+  annotation: false
+
+resources:
+  api:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+  web:
+    requests:
+      cpu: 25m
+      memory: 32Mi
+    limits:
+      memory: 64Mi
+
+# Never put real passwords here. Day 6 replaces this with Vault / ExternalSecrets.
+existingSecret: secure-demo-db

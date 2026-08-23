@@ -1,0 +1,2 @@
+kubeconfig_path = "REPLACE_WITH_LOCAL_KUBECONFIG_PATH"
+namespace       = "team-learner"

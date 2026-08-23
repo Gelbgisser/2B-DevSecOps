@@ -1,0 +1,87 @@
+# Local secrets and machine overrides
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+credentials.json
+service-account*.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Node / Java build leftovers if labs generate them locally
+node_modules/
+dist/
+build/
+target/
+.gradle/
+*.class
+*.jar
+!apps/java-lib/**
+!labs/**/fixtures/*.jar
+
+# Docker / Compose local state
+*.log
+docker-data/
+volumes/
+
+# Kubernetes / Helm local renders
+charts/**/charts/
+*.tgz
+rendered/
+kubeconfig*
+!docs/**/kubeconfig.example
+
+# CI / scanner reports (generated)
+security/reports/*
+!security/reports/.gitkeep
+**/reports/*.json
+**/reports/*.xml
+**/reports/*.html
+!**/reports/.gitkeep
+sbom*.json
+grype*.json
+gitleaks*.json
+semgrep*.json
+trivy*.json
+
+# Terraform / Vault local state
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+crash.log
+.vault-token
+vault-data/
+vault-keys.json
+
+# Cloudflare tunnel credentials (never commit)
+*.json.gz
+cloudflared/
+credentials-file
+cert.pem
+~/.cloudflared/
+
+# Jenkins / Nexus / Gitea local bind mounts
+jenkins_home/
+gitea-data/
+nexus-data/
+argocd-data/
+clamav-data/
+
+# Personal notes while delivering training (keep curriculum public)
+instructor-private/
+attendance.md
+scores.local.csv

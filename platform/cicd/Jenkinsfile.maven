@@ -1,0 +1,17 @@
+pipeline {
+  agent any
+  stages {
+    stage('Maven test') {
+      steps {
+        dir('apps/java-lib') {
+          sh 'mvn -B -q test'
+        }
+      }
+    }
+  }
+  post {
+    always {
+      junit allowEmptyResults: true, testResults: 'apps/java-lib/target/surefire-reports/*.xml'
+    }
+  }
+}

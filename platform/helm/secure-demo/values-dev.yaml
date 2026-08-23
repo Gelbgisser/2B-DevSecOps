@@ -1,0 +1,4 @@
+replicaCount: 1
+appUrl: http://localhost:3080
+ingress:
+  host: secure-demo.lab

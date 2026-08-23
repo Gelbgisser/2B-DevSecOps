@@ -1,0 +1,6 @@
+rules:
+  - id: node-eval
+    languages: [javascript]
+    message: eval() is a common injection sink — do not use it in the API.
+    severity: ERROR
+    pattern: eval(...)

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Secure Demo Shop</title>
+    <style>
+      :root { font-family: ui-sans-serif, system-ui, sans-serif; color: #0f172a; background: #f8fafc; }
+      body { max-width: 42rem; margin: 2rem auto; padding: 0 1rem; }
+      h1 { font-size: 1.4rem; }
+      .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem 1.2rem; margin: 1rem 0; }
+      code, pre { background: #f1f5f9; padding: 0.15rem 0.35rem; border-radius: 4px; }
+      pre { padding: 0.75rem; overflow: auto; }
+      button { background: #0f766e; color: #fff; border: 0; padding: 0.5rem 0.9rem; border-radius: 8px; cursor: pointer; }
+      .muted { color: #64748b; font-size: 0.9rem; }
+    </style>
+  </head>
+  <body>
+    <h1>Secure Demo Shop</h1>
+    <p class="muted">
+      This page is served by the <strong>edge</strong>. API calls use relative
+      <code>/api/...</code> so the browser stays on <code>APP_URL</code>
+      (including the published port). Do not point the browser at the API container port.
+    </p>
+    <div class="card">
+      <button id="hello">Call GET /api/hello</button>
+      <pre id="hello-out">(no response yet)</pre>
+    </div>
+    <div class="card">
+      <form id="upload-form">
+        <label>Upload a file (quarantine → scan on Day 7)</label><br />
+        <input type="file" name="file" required />
+        <button type="submit">POST /api/upload</button>
+      </form>
+      <pre id="upload-out">(no upload yet)</pre>
+    </div>
+    <script>
+      document.getElementById("hello").onclick = async () => {
+        const res = await fetch("/api/hello");
+        const text = await res.text();
+        document.getElementById("hello-out").textContent =
+          "status " + res.status + "\n" + text;
+      };
+      document.getElementById("upload-form").onsubmit = async (e) => {
+        e.preventDefault();
+        const body = new FormData(e.target);
+        const res = await fetch("/api/upload", { method: "POST", body });
+        document.getElementById("upload-out").textContent =
+          "status " + res.status + "\n" + (await res.text());
+      };
+    </script>
+  </body>
+</html>

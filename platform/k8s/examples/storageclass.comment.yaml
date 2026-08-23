@@ -1,0 +1,9 @@
+# k3s local-path is the default StorageClass. Do not switch Postgres to hostPath.
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-path-explained
+provisioner: rancher.io/local-path
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true

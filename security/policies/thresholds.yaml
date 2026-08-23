@@ -1,0 +1,10 @@
+# Fail the gate when scanners report these severities (Day 8).
+# Document exceptions in security/policies/exceptions.md — do not silently lower this.
+grype:
+  fail_on: critical
+semgrep:
+  fail_on: error
+gitleaks:
+  fail_on: any
+syft:
+  required: true

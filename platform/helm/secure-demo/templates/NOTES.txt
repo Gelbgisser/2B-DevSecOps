@@ -1,0 +1,4 @@
+1. Apply a lab Secret first (`kubectl apply -f platform/k8s/base/secret.example.yaml`).
+2. Set `--set appUrl=http://<vm-ip>` to match how browsers reach Traefik (port 80 omitted).
+3. Persistence uses StorageClass `local-path` — do not switch Postgres to hostPath.
+4. Enable ClamAV sidecar only if the node has RAM (`clamav.sidecar=true`).
