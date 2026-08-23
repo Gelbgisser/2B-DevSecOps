@@ -2,13 +2,47 @@
 
 **Timebox:** ~6.5 hours  
 **Where:** WSL + Docker Desktop (same as Day 1)  
-**Prerequisites:** Day 1 image for the API; Git branch up to date
+**Prerequisites:** Day 1; Git on **your fork** ([`docs/00-git-basics.md`](../../docs/00-git-basics.md))
 
 ```bash
-git switch lab/$USER-day01
-git pull --ff-only
-git switch -c lab/$USER-day02
+# Work on YOUR origin. Do not push to ItayPr/2B-DevSecOps.
+git switch lab/$USER/day-01
+git pull --ff-only            # --ff-only: abort if a merge commit would be required
+git switch -c lab/$USER/day-02
 ```
+
+## What you will have by the end of the day
+
+Several containers on one **private Docker network**. Only **nginx** is published on `localhost:3080`. Postgres data lives in a **named volume**. You will break healthchecks and 502s on purpose so you recognise them at work.
+
+**Files to open while you run labs** (comments in-file):
+
+| File | Role |
+|------|------|
+| [`platform/compose/docker-compose.yml`](../../platform/compose/docker-compose.yml) | Services, network, volumes, **who publishes ports** |
+| [`platform/docker/nginx/conf.d/default.conf`](../../platform/docker/nginx/conf.d/default.conf) | Edge: `/` → web, `/api` → api, request-time DNS |
+| [`.env.example`](../../.env.example) | `APP_URL` + `NGINX_HTTP_PORT` (copy to `.env`, never commit) |
+
+### Compose flags you will type
+
+```bash
+# -f FILE     compose file (not the default ./docker-compose.yml in this repo)
+# --env-file  substitute ${NGINX_HTTP_PORT} from .env
+# -d          detached
+# --build     rebuild images whose context changed
+docker compose -f platform/compose/docker-compose.yml --env-file .env up -d --build
+```
+
+| Flag / subcommand | Meaning |
+|-------------------|---------|
+| `up` | Create network/volumes, start containers |
+| `down` | Stop and remove containers; **keep** named volumes |
+| `down -v` | Also delete volumes (**database wipe** — Lab 3) |
+| `ps` | Process list |
+| `logs -f` | Follow stdout (`-f` = follow, like `tail -f`) |
+| `--profile clamav` | Start optional services tagged with that profile (Day 7) |
+
+`make up` is a wrapper around the `docker compose ...` command above. Read the `Makefile` if you want the exact line.
 
 ## Learning objectives
 

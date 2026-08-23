@@ -1,118 +1,193 @@
-# Git basics — clone, branch, pull, push
+# Git basics — fork, branch, pull, push (your repo)
 
-**Timebox:** 45–60 minutes on the morning of Day 1.
+**Timebox:** 45–60 minutes, morning of Day 1.  
+**Prerequisites:** Git installed in WSL ([`00-prerequisites-wsl-docker.md`](00-prerequisites-wsl-docker.md) § 2–5).
 
-You will use Git every remaining day. Day 5’s Gitea remote is the same commands with a different URL.
+## The rule for this class
 
-## Why this matters for DevSec
+| Remote | URL | You |
+|--------|-----|-----|
+| `origin` | `https://github.com/YOUR_USER/2B-DevSecOps.git` | **clone, pull, push** |
+| `upstream` | `https://github.com/ItayPr/2B-DevSecOps.git` | **fetch / pull only** (curriculum updates) |
 
-Git is how **desired state** (Helm values, policies, Jenkinsfiles) moves between laptops and the cluster. Secrets accidentally committed to Git are a supply-chain incident. Learn the happy path *and* how to not put `.env` on `main`.
+You do **not** create classwork branches on the instructor’s public repo. You would get `permission denied`, and even if you had access it would mix 20 people’s half-finished labs into the textbook.
+
+**Day 5 extra remote:** local Gitea (`gitea`). Same Git commands, different URL, for Jenkins. Still not `ItayPr/...`.
+
+---
 
 ## Mental model
 
 ```text
-working tree  --git add-->  index/stage  --git commit-->  local repo  --git push-->  origin
-                                    ^                         |
-                                    |                         git pull
-                                    +------ git checkout / switch
+GitHub: ItayPr/2B-DevSecOps     ← upstream  (textbook)
+            │ fork (once, in the browser)
+            ▼
+GitHub: YOU/2B-DevSecOps        ← origin    (your notebook)
+            │ git clone
+            ▼
+WSL folder ~/src/2B-DevSecOps
+            │ git switch -c lab/YOU/day-01
+            │ git add / commit
+            ▼
+        git push -u origin lab/YOU/day-01
 ```
 
-- **clone** — copy a remote repo once
-- **pull** — fetch + merge (or rebase) others’ commits
-- **push** — publish your commits
-- **branch** — isolated line of work (your lab user, not `main` if the instructor locks it)
+| Command | Meaning |
+|---------|---------|
+| `clone` | Copy a repo **once** onto disk |
+| `switch -c` | Create and move to a new **branch** (isolated line of history) |
+| `add` | Stage files for the next commit |
+| `commit` | Snapshot on **your laptop** |
+| `push` | Upload commits to **origin** (your fork) |
+| `pull` | Download + integrate someone else’s commits |
+| `fetch` | Download but do not merge yet |
 
-## Lab G1 — identity and first commit (already cloned)
+---
 
-```bash
-cd ~/src/devsecops-bootcamp   # or your path
-git status
-git log -1 --oneline
-```
-
-Create a scratch branch so you never push broken labs to `main` by accident:
-
-```bash
-git switch -c lab/$USER-day01
-echo "# scratch" >> .gitkeep-scratch 2>/dev/null || true
-# better: keep notes out of git
-mkdir -p $HOME/lab-notes
-echo "Day 1 notes" > $HOME/lab-notes/day01.md
-```
-
-## Lab G2 — add / commit (only files you intend)
+## Lab G0 — confirm remotes
 
 ```bash
-git status
-git diff
-# stage a real file you changed, not .env
-git add -p
-git commit -m "docs: my day 1 notes stay local — this commit is a practice commit"
-```
+cd ~/src/2B-DevSecOps    # or wherever you cloned
 
-If you have nothing to commit, that is fine. Practice on a branch:
-
-```bash
-echo "practice $(date -Is)" >> $HOME/lab-notes/git-practice.txt
-# that file is outside the repo — good. Inside the repo:
-mkdir -p learner-scratch
-echo "practice $(date -Is)" > learner-scratch/$USER.txt
-git add learner-scratch/$USER.txt
-git commit -m "chore: git practice file for $USER"
-```
-
-`learner-scratch/` is gitignored? If not, it is OK for class. Do **not** put passwords there.
-
-## Lab G3 — clone / pull / push (pair or instructor origin)
-
-Instructor writes the origin on the board (GitHub, GitLab, or later Gitea).
-
-```bash
 git remote -v
-git pull --ff-only
 ```
 
-Push your branch:
+If `origin` is `ItayPr/2B-DevSecOps` and you are not a maintainer, you cloned the textbook. Fix:
 
 ```bash
-git push -u origin lab/$USER-day01
+# Point origin at YOUR fork (HTTPS). SSH: git@github.com:YOUR_USER/2B-DevSecOps.git
+git remote rename origin upstream
+git remote add origin https://github.com/YOUR_USER/2B-DevSecOps.git
+git remote -v
 ```
 
-First-time GitHub HTTPS will prompt a **Personal Access Token**, not your account password. Prefer SSH if the instructor issued keys.
+---
 
-### SSH (optional)
+## Lab G1 — branch named after you
 
 ```bash
-ls -l ~/.ssh
-# generate ONLY if you have no key
-ssh-keygen -t ed25519 -C "you@company.example" -f ~/.ssh/id_ed25519_lab
-cat ~/.ssh/id_ed25519_lab.pub
+git status          # clean? or list of edited files
+git log -1 --oneline
+
+# -c  create the branch if it does not exist
+# lab/YOUR_USER/day-01  keeps your work apart from classmates and from main
+git switch -c lab/$USER/day-01
+# If $USER is not your GitHub name, write it literally:
+# git switch -c lab/itay/day-01
+
+git status
+# Expected: On branch lab/...
 ```
 
-Paste the **public** key into Gitea/GitHub. Never commit `id_ed25519`.
-
-## Lab G4 — do not commit secrets
+Keep private notes **outside** git:
 
 ```bash
-cp .env.example .env
-# edit a fake password
+mkdir -p "$HOME/lab-notes"
+echo "Day 1" > "$HOME/lab-notes/day01.md"
+```
+
+---
+
+## Lab G2 — one practice commit
+
+```bash
+mkdir -p learner-scratch
+echo "practice $(date -Is) by $USER" > "learner-scratch/${USER}.txt"
+
+git status
+# learner-scratch/... should show as Untracked
+
+git add "learner-scratch/${USER}.txt"
+git status
+# file should be under Changes to be committed
+
+git commit -m "chore: git practice file for ${USER}"
+# -m  commit message (required; describes WHY, not only the filename)
+```
+
+Do **not** put passwords in `learner-scratch/`.
+
+---
+
+## Lab G3 — push to **your** fork
+
+```bash
+# -u  remember this branch tracks origin/lab/... so later you can type  git push
+git push -u origin lab/$USER/day-01
+```
+
+HTTPS: username = GitHub user; password = **token**.  
+SSH: no password if the key is loaded.
+
+**Expected:** GitHub shows the branch on **your** fork. The instructor repo’s branch list does **not** need your lab branch.
+
+Pull later on another machine:
+
+```bash
+git clone https://github.com/YOUR_USER/2B-DevSecOps.git
+git switch lab/YOUR_USER/day-01
+```
+
+---
+
+## Lab G4 — get textbook updates (`upstream`)
+
+When the instructor fixes a lab:
+
+```bash
+git fetch upstream
+# fetch  download commits; does not change your files yet
+
+git switch main
+git pull --ff-only upstream main
+# --ff-only  refuse to merge if you committed on main locally (keeps history simple)
+
+git switch lab/$USER/day-01
+git merge main
+# or: git rebase main   (replay your commits on top; ask before first rebase)
+```
+
+Never: `git push upstream` (you should not have permission anyway).
+
+---
+
+## Lab G5 — secrets stay out of git
+
+```bash
+cp -n .env.example .env
 git status
 git check-ignore -v .env
+# Expected: .gitignore tells git to ignore .env
 ```
 
-Expected: `.env` is ignored. If `git add .` stages `.env`, **stop** and fix `.gitignore`.
+If `git add .` stages `.env`, **stop**. Fix `.gitignore`. If you already committed a secret: it is burned — rotate it; `git rm --cached .env` and commit. History still has it. Do not `git push --force` to `main`.
 
-If you already committed a secret: rotate it (it is burned), then `git rm --cached .env` and commit. History still contains it — Day 8 Gitleaks is how we catch this earlier. Do not `git push --force` to `main`.
+---
+
+## Flag cheat-sheet (Git)
+
+| Flag | Typical use | Meaning |
+|------|-------------|---------|
+| `-c` | `git switch -c name` | Create branch |
+| `-m` | `git commit -m "..."` | Message |
+| `-u` | `git push -u origin branch` | Set upstream tracking |
+| `-v` | `git remote -v` | Verbose (show URLs) |
+| `--ff-only` | `git pull --ff-only` | Fast-forward only; no merge commit surprises |
+| `--cached` | `git rm --cached file` | Untrack but keep the file on disk |
+| `-p` | `git add -p` | Stage hunk by hunk |
+
+---
 
 ## Self-check
 
-- [ ] I can explain clone vs pull vs push in one sentence each
-- [ ] I work on a branch named after me
+- [ ] I can say clone vs pull vs push in one sentence each
+- [ ] `origin` is **my** GitHub; `upstream` is `ItayPr/2B-DevSecOps`
+- [ ] I pushed `lab/<me>/day-01` to **my** fork and saw it in the GitHub UI
 - [ ] `.env` is ignored
-- [ ] `git log --oneline -5` works
+- [ ] I will not open a PR to the class repo for homework
 
 ## Debug challenge
 
-Your `git push` is rejected (non-fast-forward). What are the two safe next commands before you even think about `--force`?
+`git push` is rejected (non-fast-forward). Two safe commands **before** `--force`?
 
 See [`days/day-01-dockerfile/solutions/git-debug.md`](../days/day-01-dockerfile/solutions/git-debug.md).

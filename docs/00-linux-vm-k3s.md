@@ -43,21 +43,29 @@ On the VM:
 
 ```bash
 sudo apt update
+# -y  non-interactive yes. git is required on the VM too (separate machine from WSL).
 sudo apt install -y curl git make ca-certificates apt-transport-https
+git --version
 ```
 
-Clone the bootcamp repo onto the VM (do not rely on `/mnt/c` from WSL here — this is a real Linux disk):
+Clone **your fork** onto the VM (real Linux disk — do not use `/mnt/c` from Windows):
 
 ```bash
 mkdir -p ~/src && cd ~/src
-git clone <origin-url> devsecops-bootcamp
-cd devsecops-bootcamp
+# Replace YOUR_USER. Same fork you pushed to from WSL.
+git clone https://github.com/YOUR_USER/2B-DevSecOps.git
+cd 2B-DevSecOps
+git remote add upstream https://github.com/ItayPr/2B-DevSecOps.git
+git switch lab/YOUR_USER/day-02   # or whatever branch has your work
 cp .env.example .env
 ```
 
 ## 2. Install k3s (single node)
 
 ```bash
+# -sfL  curl: silent, fail on HTTP errors, follow redirects
+# sudo sh -s -  run the installer as root; args after the last - go to the script
+# --write-kubeconfig-mode 644  kubeconfig readable by your user (lab only; lock down at work)
 curl -sfL https://get.k3s.io | sudo sh -s - --write-kubeconfig-mode 644
 ```
 

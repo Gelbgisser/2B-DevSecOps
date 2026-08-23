@@ -1,16 +1,22 @@
 name: secure-demo
 
 # Day 2 core stack. Only `nginx` publishes a host port.
+#
 # Usage (WSL, repo root):
 #   cp .env.example .env
 #   docker compose -f platform/compose/docker-compose.yml --env-file .env up -d --build
 #
-# Optional profiles:
-#   --profile clamav     Day 7 malware scanner
-#   --profile waf        Day 7 ModSecurity (extra RAM)
-#   --profile cicd       Day 5 Gitea + Jenkins + registry (lite)
-#   --profile cicd-full  Day 5 + Nexus
-#   --profile vault      Day 6 Vault dev
+# How to read this file:
+#   services:     containers (each gets a DNS name on the default network)
+#   image:        pull from Docker Hub
+#   build:        build from a Dockerfile in "context:"
+#   ports:        HOST:CONTAINER — only nginx has this (the edge)
+#   expose:       document internal ports; does NOT publish to Windows
+#   volumes:      named volumes persist after "compose down" (not down -v)
+#   depends_on:   start order; condition: service_healthy waits on healthcheck
+#   profiles:     optional extras (clamav, cicd, vault) — not started by default
+#
+# Optional: --profile clamav | waf | cicd | cicd-full | vault
 
 services:
   nginx:
@@ -20,6 +26,7 @@ services:
         condition: service_healthy
       web:
         condition: service_started
+    # HOST (Windows localhost) : CONTAINER (nginx listen 80)
     ports:
       - "${NGINX_HTTP_PORT:-3080}:80"
     volumes:

@@ -1,122 +1,139 @@
-# Day 1 — Git + Dockerfile
+# Day 1 — Git + your first Docker images
 
-**Timebox:** ~6.5 hours (including Git morning + exercises)  
-**Where:** Windows 11 laptop, commands in **WSL Ubuntu**  
-**Prerequisites:** [`docs/00-prerequisites-wsl-docker.md`](../../docs/00-prerequisites-wsl-docker.md)
+**Timebox:** ~6.5 hours (Git 45–60 min + labs)  
+**Where:** Windows 11, **all commands in WSL Ubuntu**  
+**Do this first:** [`docs/00-start-here.md`](../../docs/00-start-here.md) → [`docs/00-prerequisites-wsl-docker.md`](../../docs/00-prerequisites-wsl-docker.md) → [`docs/00-git-basics.md`](../../docs/00-git-basics.md)
+
+**How Dockerfiles are put together:** [`docs/01-reading-dockerfiles.md`](../../docs/01-reading-dockerfiles.md) (open it next to the lab files).
+
+## What you will have by 16:30
+
+- A branch **on your GitHub fork** (not on `ItayPr/2B-DevSecOps`)
+- Several images you built; one of them is the class API
+- A mental model: **context → layers → run as non-root → publish with `-p`**
 
 ## Learning objectives
 
-By the end of the day you can:
-
-- Clone a repo, create a branch, commit, pull, and push
-- Build, tag, run, log, and exec into an image
-- Explain layers and why COPY order matters
-- Write a multi-stage Dockerfile
-- Run the process as a **non-root** user
-- Keep secrets **out** of the build context
+- Clone / branch / commit / pull / push on **your** repo
+- Read a Dockerfile line by line
+- Explain every flag you type on `docker build` and `docker run`
+- Multi-stage builds and why the final image is small
+- `.dockerignore` so secrets never enter the daemon
 
 ## Agenda
 
 | Block | Minutes | What |
 |------:|--------:|------|
-| 0 | 45–60 | Git labs in [`docs/00-git-basics.md`](../../docs/00-git-basics.md) |
-| A | 45 | Hello image |
-| B | 40 | Layer caching |
-| C | 40 | Multi-stage + size |
+| 0 | 45–60 | Git on **your fork** |
+| A | 45 | Hello image + flag walkthrough |
+| B | 40 | Layer cache |
+| C | 40 | Multi-stage |
 | D | 40 | Non-root |
 | E | 30 | `.dockerignore` |
-| Ex | 60 | Dockerfile for `apps/secure-demo/api` |
-| Scan | 20 | Image scan habit |
+| Ex | 60 | API Dockerfile |
+| Scan | 20 | Scout / Grype habit |
 | Debug | 30 | Broken Dockerfile |
-| Self-check | 15 | Tick the list |
-
-All commands assume you are in the **repo root** inside WSL unless a `cd` says otherwise.
+| Self-check | 15 | |
 
 ---
 
-## Block 0 — Git (do this first)
+## Block 0 — Git
 
-Complete every self-check in [`docs/00-git-basics.md`](../../docs/00-git-basics.md).
+Finish the self-check in [`docs/00-git-basics.md`](../../docs/00-git-basics.md).
 
-You should be on a personal branch:
+You should be on a personal branch **and** have pushed it to **your** fork:
 
 ```bash
-git switch -c lab/$USER-day01
-git status
+cd ~/src/2B-DevSecOps
+git switch -c lab/$USER/day-01   # skip -c if the branch already exists
+git remote -v                    # origin must be YOUR_USER/2B-DevSecOps
 ```
 
 ---
 
-## Lab A — FROM + COPY + CMD
+## Lab A — build, run, understand flags
+
+Open [`labs/lab-a-hello/Dockerfile`](labs/lab-a-hello/Dockerfile) and read the comments. Then:
 
 ```bash
 cd days/day-01-dockerfile/labs/lab-a-hello
+
+# -t  tag (name:tag) so you can run it by name instead of a hex id
+# .   build context = THIS directory (Dockerfile + server.js only)
 docker build -t lab-a-hello:1 .
+
+# --rm     remove container filesystem when the process exits
+# -p 3000:3000
+#      published port. Left = host (Windows localhost). Right = process in the container.
+#      Without -p, curl http://localhost:3000 fails even if the app is "up".
+# --name   stable name for logs / exec / stop (must be unique)
 docker run --rm -p 3000:3000 --name lab-a lab-a-hello:1
 ```
 
-Other WSL terminal:
+**What to expect:** last line of the container log looks like `listen 3000`. The terminal is **blocked** — that is the server. Leave it running.
+
+**Second WSL tab:**
 
 ```bash
+# -s  silent progress  -S  show errors
 curl -sS http://localhost:3000
+# Expected JSON: {"message":"hello from lab A", ...}
+
 docker logs lab-a
+# stdout of PID 1 (node)
+
 docker exec lab-a ps aux
+# exec = extra process inside the SAME container
+
 docker inspect lab-a --format '{{.Config.User}} {{.Config.ExposedPorts}}'
+# User is often empty (root) in this lab — Lab D changes that.
 ```
 
-Expected body:
+Stop: Ctrl+C in the first tab, or `docker stop lab-a`.
 
-```json
-{"message":"hello from lab A","ts":"..."}
-```
-
-Stop with Ctrl+C in the first terminal (or `docker stop lab-a`).
-
-**Notes**
-
-- `-p 3000:3000` is **publish**. Without it the process listens only inside the namespace.
-- `EXPOSE` in a Dockerfile does **not** publish a host port. Lab debug will try to trick you with this.
+**EXPOSE vs `-p`:** `EXPOSE 3000` in the Dockerfile does **not** open a Windows port. Only `-p` (or Compose `ports:`) does. The debug lab abuses this.
 
 ---
 
-## Lab B — layer caching
+## Lab B — why COPY order matters
+
+Read comments in `Dockerfile.slow` vs `Dockerfile.fast`.
 
 ```bash
 cd days/day-01-dockerfile/labs/lab-b-layers
+
+# -f  choose a Dockerfile whose name is not "Dockerfile"
 docker build -t lab-b:slow -f Dockerfile.slow .
 docker build -t lab-b:fast -f Dockerfile.fast .
 ```
 
-Edit `package.json` (bump the version) and rebuild **both**. Then edit nothing but add a comment in a new `README.md` and rebuild both again.
-
-Expected: the **fast** file reuses the `npm install` layer when only source files change. The **slow** file reruns install every time.
+Bump the version in `package.json`, rebuild both (watch which one reruns `npm install`). Then add a `README.md` and rebuild again.
 
 ```bash
 docker history lab-b:fast
+# Newest layer at the top. Cached steps say CACHED on rebuild.
 ```
 
-**Security habit:** a fat layer that copied `.env` once stays in history even if you delete the file in a later layer. Do not COPY secrets. Ever.
+**Security:** a layer that `COPY`’d `.env` stays in history forever even if a later layer deletes the file. Never copy secrets.
 
 ---
 
-## Lab C — multi-stage
+## Lab C — multi-stage (tiny final image)
 
-Needs the Go toolchain **inside the image** (you do not install Go on Windows).
+You do **not** install Go on Windows. The **builder** stage contains Go.
 
 ```bash
 cd days/day-01-dockerfile/labs/lab-c-multistage
 docker build -t lab-c:multi .
 docker images lab-c:multi
-```
+# SIZE is a few MB, not hundreds (the golang image is not the final image)
 
-Compare with a single-stage mental model: `FROM golang:1.22-alpine` as the final image would ship compilers forever.
-
-```bash
 docker run --rm -p 8080:8080 lab-c:multi
-curl -sS http://localhost:8080
 ```
 
-Expected: `hello from multi-stage`
+Other tab: `curl -sS http://localhost:8080` → `hello from multi-stage`
+
+`COPY --from=builder` copies from **stage "builder"**, not from your laptop.
 
 ---
 
@@ -125,18 +142,15 @@ Expected: `hello from multi-stage`
 ```bash
 cd days/day-01-dockerfile/labs/lab-d-nonroot
 docker build -t lab-d:nonroot .
+
+# -d  detached (background). Use docker logs / docker stop.
 docker run --rm -d --name lab-d -p 3000:3000 lab-d:nonroot
 docker exec lab-d id
-```
-
-Expected: `uid=10001(app)`
-
-```bash
-docker inspect lab-d --format '{{.HostConfig.CapDrop}}'
+# Expected: uid=10001(app)
 docker stop lab-d
 ```
 
-Discussion (no extra software): the Docker default is **too many Linux capabilities**. Production runtimes drop `ALL` and add back only what you need (Kubernetes `securityContext.capabilities`). You rarely need `NET_RAW` or `SYS_ADMIN` for an HTTP API.
+Default Linux capabilities are generous. Kubernetes later uses `drop: [ALL]`. You do not need `NET_RAW` for this API.
 
 ---
 
@@ -146,78 +160,59 @@ Discussion (no extra software): the Docker default is **too many Linux capabilit
 cd days/day-01-dockerfile/labs/lab-e-dockerignore
 docker build -t lab-e:ignore .
 docker run --rm lab-e:ignore
+# secrets.txt must NOT appear. Open .dockerignore to see the pattern.
 ```
 
-Expected: `secrets.txt` is **not** listed. Open `.dockerignore` and `secrets.txt` to see why.
-
-If you comment out `.dockerignore` and rebuild, the fake secret is copied into the image and is recoverable from history. That is a supply-chain fail.
+If you comment out `.dockerignore` and rebuild, the fake secret is **inside the image**. That is a supply-chain fail.
 
 ---
 
-## Exercise — Dockerfile for the real API
+## Exercise — Dockerfile for the class API
 
-Without looking at the solution:
+Read [`docs/01-reading-dockerfiles.md`](../../docs/01-reading-dockerfiles.md) § API production file, then **write your own** before opening the reference.
 
-1. Read [`apps/secure-demo/README.md`](../../apps/secure-demo/README.md) and `apps/secure-demo/api/src/index.js`.
-2. Write a Dockerfile under `apps/secure-demo/api/` (or in your notes) that:
-   - uses `node:22-alpine`
-   - copies `package.json` before source
-   - runs as uid `10001`
-   - `CMD` starts `node src/index.js`
-   - publishes **nothing** except what `docker run -p` does
-3. Run it:
+1. Read `apps/secure-demo/api/src/index.js` (health + `/api/hello`).
+2. Requirements: `node:22-alpine`, copy `package.json` first, uid `10001`, `CMD` runs `node src/index.js`, no host ports in the Dockerfile.
+3. Run:
 
 ```bash
 cd apps/secure-demo/api
-npm install
+npm install          # laptop Node, for tests only
 npm test
+
 docker build -t secure-demo-api:day1 .
+
+# -e  set env inside the container (APP_URL must include the port you publish)
 docker run --rm -p 3001:3001 -e APP_URL=http://localhost:3001 secure-demo-api:day1
 ```
+
+Other tab:
 
 ```bash
 curl -sS http://localhost:3001/health/live
 curl -sS http://localhost:3001/api/hello
 ```
 
-Expected:
+Expected: `{"status":"live"}` and JSON with `requestId`.
 
-```json
-{"status":"live"}
-```
+Reference: [`solutions/README.md`](solutions/README.md) and [`apps/secure-demo/api/Dockerfile`](../../apps/secure-demo/api/Dockerfile) (commented).
 
-and a JSON hello with `requestId`.
-
-Reference solution: [`solutions/README.md`](solutions/README.md) and the repo Dockerfile [`apps/secure-demo/api/Dockerfile`](../../apps/secure-demo/api/Dockerfile).
-
-A starter checklist lives in [`exercises/write-api-dockerfile.md`](exercises/write-api-dockerfile.md).
+Checklist: [`exercises/write-api-dockerfile.md`](exercises/write-api-dockerfile.md).
 
 ---
 
 ## Security habit — scan before you share a tag
 
-If Docker Scout is available:
-
 ```bash
-docker scout quickview secure-demo-api:day1
-```
+docker scout quickview secure-demo-api:day1   # if Scout is installed
 
-If not, install Grype in WSL (optional today, required by Day 8):
-
-```bash
+# Grype (optional today, required Day 8)
 curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b ~/.local/bin
 export PATH="$HOME/.local/bin:$PATH"
 grype secure-demo-api:day1
 ```
 
-Talk about **pinning by digest**:
-
-```bash
-docker images --digests node | head
-# FROM node:22-alpine@sha256:...
-```
-
-Tags move. Digests do not. Class images may keep floating tags for speed; production should pin.
+Tags move; digests do not: `docker images --digests node | head`
 
 ---
 
@@ -229,21 +224,34 @@ docker build -t lab-broken .
 docker run --rm -p 3000:3000 lab-broken
 ```
 
-It will fail. Fix it **without** opening the solution first. Hints: `WORKDIR`, where `COPY` put the file, and whether `EXPOSE` is why `curl` fails.
+Fix it without the solution first. Think `WORKDIR`, `COPY` destination, and `EXPOSE` vs `-p`.
 
 Solution: [`solutions/Dockerfile.fixed`](solutions/Dockerfile.fixed).
 
 ---
 
+## Push your work (your fork)
+
+```bash
+git add days/day-01-dockerfile apps/secure-demo/api/Dockerfile
+git status                 # .env must not appear
+git commit -m "lab: day 1 dockerfile work"
+git push -u origin lab/$USER/day-01
+```
+
+`origin` = your GitHub. Do not push to `upstream`.
+
+---
+
 ## Self-check
 
-- [ ] I can clone, branch, commit, pull, push
-- [ ] I can explain one layer vs the whole image
-- [ ] `docker run -p` is what publishes a port, not `EXPOSE`
-- [ ] My API image runs as non-root
-- [ ] I did not copy `.env` into an image
-- [ ] I scanned at least one image or documented why Scout/Grype was missing
+- [ ] I can clone, branch, commit, pull, push **on my fork**
+- [ ] I can explain `-t`, `-p host:container`, `--rm`, `-d`, `-e`, `-f`
+- [ ] I can explain `FROM` / `WORKDIR` / `COPY` / `RUN` / `USER` / `CMD` / `EXPOSE`
+- [ ] `docker run -p` publishes; `EXPOSE` does not
+- [ ] API image runs as non-root; `.env` never copied
+- [ ] I scanned an image or wrote down why Scout/Grype was missing
 
 ## Security takeaway
 
-The build context is an attack surface. Least privilege starts at `USER` and `.dockerignore`, not at the WAF you install on Day 7.
+The build **context** is an attack surface. Least privilege starts at `USER` and `.dockerignore`, not at the WAF on Day 7.

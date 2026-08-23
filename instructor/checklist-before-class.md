@@ -8,6 +8,8 @@
 - [ ] No production kubeconfigs, vault tokens, or Cloudflare certs in the demo clone (`git status` clean of secrets)
 - [ ] Printed or projected **public origin rule** (`APP_URL` includes port)
 - [ ] Answer keys kept closed until debug review
+- [ ] Learners told: **fork** `ItayPr/2B-DevSecOps`; push only to **their** GitHub. No classwork PRs to the textbook repo unless you ask
+- [ ] Git is installed **in WSL** (`sudo apt install git`) — not assumed from Windows
 - [ ] Learners told: EICAR is streamed, not saved on Windows Desktop
 - [ ] Lite-mode story ready for 8 GB laptops (skip Nexus, skip WAF image)
 

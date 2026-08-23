@@ -6,10 +6,14 @@ This repository is **self-contained**. You do not need any product codebase to t
 
 ## Start here if you are new
 
-1. Read this page once.
-2. Install the laptop toolchain: [`docs/00-prerequisites-wsl-docker.md`](docs/00-prerequisites-wsl-docker.md).
-3. Learn Git (clone / pull / push / branch): [`docs/00-git-basics.md`](docs/00-git-basics.md).
-4. Open **Day 1**: [`days/day-01-dockerfile/README.md`](days/day-01-dockerfile/README.md).
+**Do this in order. Do not skip Git install — it is not bundled with Windows.**
+
+1. Read **what to expect and whose GitHub you push to:** [`docs/00-start-here.md`](docs/00-start-here.md).  
+   Short version: **fork this repo to your account.** Lab branches live on **your** fork. Do **not** push to `ItayPr/2B-DevSecOps`.
+2. Install WSL, **Git in Ubuntu**, Docker Desktop: [`docs/00-prerequisites-wsl-docker.md`](docs/00-prerequisites-wsl-docker.md).
+3. Fork, clone, first push: [`docs/00-git-basics.md`](docs/00-git-basics.md).
+4. How to read a Dockerfile (line by line): [`docs/01-reading-dockerfiles.md`](docs/01-reading-dockerfiles.md).
+5. Open **Day 1**: [`days/day-01-dockerfile/README.md`](days/day-01-dockerfile/README.md) (every `docker` flag is commented).
 
 From **Day 3** onward you leave Docker Desktop as the “cluster” and run **k3s on a Linux VM** so data lives on persistent volumes. Setup: [`docs/00-linux-vm-k3s.md`](docs/00-linux-vm-k3s.md).
 
@@ -133,8 +137,10 @@ PowerShell is not the default. If a command must differ, the lab calls it out.
 
 | Doc | When |
 |-----|------|
-| [Prerequisites: WSL + Docker](docs/00-prerequisites-wsl-docker.md) | Before Day 1 |
-| [Git basics](docs/00-git-basics.md) | Morning of Day 1 |
+| [Start here (expect / GitHub fork)](docs/00-start-here.md) | Before any install |
+| [Prerequisites: Git + WSL + Docker](docs/00-prerequisites-wsl-docker.md) | Before Day 1 |
+| [Git: fork, branch, pull, push](docs/00-git-basics.md) | Morning of Day 1 |
+| [Reading Dockerfiles](docs/01-reading-dockerfiles.md) | Day 1 labs |
 | [Linux VM + k3s](docs/00-linux-vm-k3s.md) | Before Day 3 |
 | [Terraform basics](docs/01-terraform-basics.md) | End of Day 2 / start of Day 3 |
 | [Pedagogy map](docs/pedagogy.md) | Instructors |
