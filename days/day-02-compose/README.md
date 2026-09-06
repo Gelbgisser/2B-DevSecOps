@@ -42,17 +42,7 @@ docker compose -f platform/compose/docker-compose.yml --env-file .env up -d --bu
 | `logs -f` | Follow stdout (`-f` = follow, like `tail -f`) |
 | `--profile clamav` | Start optional services tagged with that profile (Day 7) |
 
-`make up` is a wrapper around the `docker compose ...` command above. Read the `Makefile` if you want the exact line.
-
-Windows note: `make` is meant to run from WSL or Git Bash. If you are staying in PowerShell, use the `docker compose` command directly instead of the `make` target.
-
-| `make` target | Direct `docker compose` equivalent |
-|--------------|------------------------------------|
-| `make up` | `docker compose -f platform/compose/docker-compose.yml --env-file .env up -d --build` |
-| `make down` | `docker compose -f platform/compose/docker-compose.yml --env-file .env down` |
-| `make down-v` | `docker compose -f platform/compose/docker-compose.yml --env-file .env down -v` |
-| `make ps` | `docker compose -f platform/compose/docker-compose.yml --env-file .env ps` |
-| `make logs` | `docker compose -f platform/compose/docker-compose.yml --env-file .env logs -f --tail=100` |
+Use the `docker compose` command directly in this day. The labs below are written for PowerShell and WSL alike.
 
 ## Learning objectives
 
@@ -79,14 +69,6 @@ Only **nginx** maps a host port. Postgres and Redis do not.
 cd /path/to/devsecops-bootcamp   # repo root
 cp -n .env.example .env
 # edit .env if 3080 is taken
-make up
-make ps
-```
-
-PowerShell fallback:
-
-```powershell
-if (-not (Test-Path .env)) { Copy-Item .env.example .env }
 docker compose -f platform/compose/docker-compose.yml --env-file .env up -d --build
 docker compose -f platform/compose/docker-compose.yml --env-file .env ps
 ```
@@ -123,7 +105,7 @@ docker compose -f platform/compose/docker-compose.yml \
 
 Expected: `api` waits on `postgres` and never becomes healthy because the overlay forces `pg_isready` to fail.
 
-Ctrl+C, then `make up` without the overlay to recover.
+Ctrl+C, then rerun the same `docker compose up` command without the overlay to recover.
 
 **Takeaway:** `depends_on: condition: service_healthy` is how you avoid “API started, DB still booting” heisenbugs.
 
@@ -141,16 +123,16 @@ docker compose -f platform/compose/docker-compose.yml --env-file .env exec postg
 Restart without wiping:
 
 ```bash
-make down
-make up
+docker compose -f platform/compose/docker-compose.yml --env-file .env down
+docker compose -f platform/compose/docker-compose.yml --env-file .env up -d --build
 # SELECT still returns 1
 ```
 
 Now the dangerous one (class only):
 
 ```bash
-make down-v
-make up
+docker compose -f platform/compose/docker-compose.yml --env-file .env down -v
+docker compose -f platform/compose/docker-compose.yml --env-file .env up -d --build
 # table is gone
 ```
 
@@ -164,14 +146,14 @@ The named volume is the **same idea** as a Kubernetes PVC (and later a cloud dis
 
 ## Lab 4 — 502 after rebuild (resolver)
 
-1. `make up` and confirm `$APP_URL/api/hello` works.
+1. Run the `docker compose up` command from Lab 1 and confirm `$APP_URL/api/hello` works.
 2. Temporarily replace the live config with the broken example:
 
 ```bash
 cp platform/docker/nginx/conf.d/default.conf /tmp/default.conf.bak
 cp platform/docker/nginx/conf.d/default.broken-startup-dns.conf.example \
    platform/docker/nginx/conf.d/default.conf
-make up
+docker compose -f platform/compose/docker-compose.yml --env-file .env up -d --build
 curl -sS -o /dev/null -w "%{http_code}\n" "$APP_URL/api/hello"
 docker compose -f platform/compose/docker-compose.yml --env-file .env up -d --build --force-recreate api
 sleep 2
@@ -182,7 +164,7 @@ Often **502**. Restore:
 
 ```bash
 mv /tmp/default.conf.bak platform/docker/nginx/conf.d/default.conf
-make up
+docker compose -f platform/compose/docker-compose.yml --env-file .env up -d --build
 ```
 
 The good config uses `resolver 127.0.0.11` and `set $upstream_api api:3001` so DNS is **request-time**. That is the Orqestra edge lesson in miniature.
@@ -214,7 +196,7 @@ Follow [`docs/01-terraform-basics.md`](../../docs/01-terraform-basics.md) Lab T1
 
 ## Debug challenge
 
-After a successful `make up`, `curl "$APP_URL/api/hello"` returns **502** but `docker compose exec api wget -qO- http://127.0.0.1:3001/api/hello` works.
+After a successful `docker compose up`, `curl "$APP_URL/api/hello"` returns **502** but `docker compose exec api wget -qO- http://127.0.0.1:3001/api/hello` works.
 
 What are the two most likely causes in *this* repo? (Stale upstream IP vs `APP_URL` / path mismatch.)
 
