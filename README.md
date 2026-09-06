@@ -114,7 +114,7 @@ security/             Policies + scanner scripts
 instructor/           Schedules, checklist, answer keys
 ```
 
-## Common commands (WSL)
+## Common commands (WSL / Git Bash)
 
 ```bash
 make env-check    # create .env from example
@@ -126,7 +126,7 @@ make down-v       # DESTROYS database volume
 make scan         # local supply-chain gate
 ```
 
-PowerShell is not the default. If a command must differ, the lab calls it out.
+PowerShell is not the default. If you stay in PowerShell, use the direct `docker compose` commands from the Day 2 README instead of the `make` targets.
 
 ## Teaching principles
 

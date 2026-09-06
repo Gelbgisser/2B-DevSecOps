@@ -44,6 +44,16 @@ docker compose -f platform/compose/docker-compose.yml --env-file .env up -d --bu
 
 `make up` is a wrapper around the `docker compose ...` command above. Read the `Makefile` if you want the exact line.
 
+Windows note: `make` is meant to run from WSL or Git Bash. If you are staying in PowerShell, use the `docker compose` command directly instead of the `make` target.
+
+| `make` target | Direct `docker compose` equivalent |
+|--------------|------------------------------------|
+| `make up` | `docker compose -f platform/compose/docker-compose.yml --env-file .env up -d --build` |
+| `make down` | `docker compose -f platform/compose/docker-compose.yml --env-file .env down` |
+| `make down-v` | `docker compose -f platform/compose/docker-compose.yml --env-file .env down -v` |
+| `make ps` | `docker compose -f platform/compose/docker-compose.yml --env-file .env ps` |
+| `make logs` | `docker compose -f platform/compose/docker-compose.yml --env-file .env logs -f --tail=100` |
+
 ## Learning objectives
 
 - Run web + API + Postgres + Redis + worker behind **one** published edge
@@ -71,6 +81,14 @@ cp -n .env.example .env
 # edit .env if 3080 is taken
 make up
 make ps
+```
+
+PowerShell fallback:
+
+```powershell
+if (-not (Test-Path .env)) { Copy-Item .env.example .env }
+docker compose -f platform/compose/docker-compose.yml --env-file .env up -d --build
+docker compose -f platform/compose/docker-compose.yml --env-file .env ps
 ```
 
 Expected: `nginx`, `api`, `web`, `postgres`, `redis`, `worker` healthy or started.
