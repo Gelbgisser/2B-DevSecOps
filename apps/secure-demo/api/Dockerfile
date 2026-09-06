@@ -39,6 +39,6 @@ ENV DATA_DIR=/data
 # Documentation only — Compose/K8s still map ports explicitly
 EXPOSE 3001
 # Compose waits on this. Node alpine may lack wget; use fetch.
-HEALTHCHECK --interval=15s --timeout=3s --start-period=10s --retries=3 \
+HEALTHCHECK --interval=15s --timeout=10s --start-period=20s --retries=5 \
   CMD node -e "fetch('http://127.0.0.1:3001/health/live').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 CMD ["node", "src/index.js"]
